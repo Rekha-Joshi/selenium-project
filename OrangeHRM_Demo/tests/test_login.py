@@ -9,6 +9,7 @@ def driver():
     d.quit()
 
 def test_valid_login(driver):
+    print("/nTesting: Valid Login")
     page = LoginPage(driver)
     page.login("Admin","admin123")
     assert "/dashboard" in driver.current_url
@@ -16,6 +17,7 @@ def test_valid_login(driver):
     print("✅ Dashboard is visible after login")
 
 def test_invalid_login(driver):
+    print("/nTesting: Invalid Login")
     page = LoginPage(driver)
     page.load()
     print("Opened login page for invalid login test...")
