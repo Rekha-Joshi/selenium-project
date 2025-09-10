@@ -1,19 +1,17 @@
 import pytest
-from utils.driver_setup import get_driver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pages.login_page import LoginPage
 
-@pytest.fixture
-def driver():
-    d = get_driver()
-    yield d
-    d.quit()
-
-def test_valid_login(driver):
-    print("/nTesting: Valid Login")
-    page = LoginPage(driver)
-    page.login("Admin","admin123")
+def test_valid_login(logged_in_driver):
+    driver = logged_in_driver
+    print("\nTesting: Valid Login")
     assert "/dashboard" in driver.current_url
-    assert "Dashboard" in driver.page_source
+    h6 = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.TAG_NAME, "h6"))
+    )
+    assert "Dashboard" in (h6.text or "")
     print("✅ Dashboard is visible after login")
 
 def test_invalid_login(driver):

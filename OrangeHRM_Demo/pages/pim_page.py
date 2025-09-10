@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 class PimPage():
     HEADER = (By.TAG_NAME,"h6") #should contain pim
@@ -17,11 +17,14 @@ class PimPage():
         self.driver = driver
         self.wait = WebDriverWait(driver, timeout)
 
-    def assert_loaded(self):
-        h6 = self.wait.until(EC.visibility_of_element_located(self.HEADER))
-        assert "PIM" in h6.text
-        assert "/pim/" in self.driver.current_url
-        print("On PIM page (header + url verified).")
+    def is_loaded(self):
+        try:
+            h6 = self.wait.until(EC.visibility_of_element_located(self.HEADER))
+            header_ok = "PIM" in h6.text
+            url_ok = "/pim/" in self.driver.current_url
+            return header_ok and url_ok
+        except TimeoutException:
+            return False
     
     def click_add(self):
         self.wait.until(EC.element_to_be_clickable(self.ADD_BTN)).click()
@@ -44,16 +47,11 @@ class PimPage():
         self.wait.until(EC.element_to_be_clickable(self.SAVE_BTN)).click()
         print("Clicked on save button")
     
-    def assert_saved(self):
+    def is_saved(self) -> bool:
         try:
             toast = self.wait.until(EC.visibility_of_element_located(self.SUCCESS_TOAST))
-            assert "Success" in toast.text
-            print("Success toast visisble.")
-            return
+            return "Success" in (toast.text or "") #False but no error
         except TimeoutException:
             self.wait.until(EC.url_contains("viewPersonalDetails"))
             h6 = self.wait.until(EC.visibility_of_element_located(self.PERSONAL_DETAILS_HEADER))
-            assert "Personal Details" in h6.text
-            print("Redirected to Personal Details page.")
-
-        
+            return "Personal Details" in (h6.text or "") #False but no error

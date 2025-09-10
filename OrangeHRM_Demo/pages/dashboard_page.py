@@ -14,7 +14,7 @@ class DashboardPage:
         self.driver = driver
         self.wait = WebDriverWait(driver, timeout)
     
-    def assert_loaded(self):
+    def is_loaded(self):
         h6 = self.wait.until(EC.visibility_of_element_located(self.HEADER))
         assert "Dashboard" in h6.text
         print("On Dashboard page.")
@@ -28,7 +28,7 @@ class DashboardPage:
         print("Clicked logout.")
     
     def logout(self):
-        self.assert_loaded()
+        self.is_loaded()
         self.open_menu()
         self.click_logout()
         #back on login page
