@@ -1,6 +1,4 @@
-git init
-git branch -M main
-git remote add origin https://github.com/<your-username>/selenium-project.git
-git add .
-git commit -m "Initial commit with OrangeHRM Demo"
-git push -u origin main
+.vscode/
+.venv/
+__pycache__/
+.pytest_cache/
