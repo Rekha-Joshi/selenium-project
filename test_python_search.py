@@ -2,14 +2,12 @@ from selenium import webdriver
 #webdriver → the remote control for browsers
 from selenium.webdriver.common.by import By
 # By → tells Selenium how to find an element (ID, NAME, XPATH, CSS)
-from selenium.webdriver.chrome.service import Service
-# Service → used to connect Selenium with ChromeDriver
+
 from selenium.webdriver.support.ui import WebDriverWait
 # WebDriverWait → explicit wait (smart waiting)
 from selenium.webdriver.support import expected_conditions as EC
 # expected_conditions as EC → conditions like element is visible, title contains text
-from webdriver_manager.chrome import ChromeDriverManager
-# ChromeDriverManager → automatically downloads/updates the right driver
+
 import pytest
 # pytest → test runner we use to structure tests
 import time
@@ -18,7 +16,7 @@ import time
 @pytest.fixture #always write this for pytest.This is special function of python
 #used to set up before test and clean up after test.
 def driver():
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver = webdriver.Chrome()
     driver.maximize_window()
     yield driver
     driver.quit() #close browser
